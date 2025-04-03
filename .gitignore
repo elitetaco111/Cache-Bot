@@ -1,2 +1,5 @@
 *.txt
 *.csv
+build/
+dist/
+*.spec
