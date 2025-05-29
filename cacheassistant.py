@@ -3,6 +3,7 @@
 #v1.1
 import csv
 import string
+import time
 
 def preprocess():
     #data holds the netuite resources
@@ -96,7 +97,7 @@ def clearcache():
 
     # Open the website and navigate to the correct page after logging in
     driver.get("https://console.cloudinary.com/media-optimizer/c-2832f4fd444e62e50b570381a0d48b/configuration/invalidate-cache")  # Replace with actual URL
-
+    time.sleep(5)  # Wait for the page to load
     user_field = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.XPATH, "//*[@id=\"user_session_email\"]"))
                 )
