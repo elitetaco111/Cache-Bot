@@ -137,6 +137,7 @@ def clearcache():
         
         for row in reader:
             if any(row):  # Ignore blank lines
+                print(f"Clearing: {row[0]}")
                 chunk.append(row[0])  # Assuming data is in the first column
             
             # Process the chunk when it reaches 20 rows
