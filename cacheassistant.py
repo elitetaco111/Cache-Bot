@@ -67,7 +67,10 @@ def preprocess():
 #write cache invalidation data to csv
     with open("output_ns.csv", "w", newline="") as csvfile:
         writer1 = csv.writer(csvfile)
-        writer1.writerows(data)
+        for idx, row in enumerate(data, 1):
+            writer1.writerow(row)
+            if idx % 49 == 0:
+                writer1.writerow([])  # Write a blank line every 49 rows
 #write the data into the used output file        
     with open("output_clean.csv", "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
