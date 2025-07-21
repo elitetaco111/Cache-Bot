@@ -36,6 +36,7 @@ def preprocess():
                     #first two images need both big and small cloudinary links
                     cloudinaryLink1 = "https://media.rallyhouse.com/products/" + row[1] + "-" + str(i+1) + ".jpg?tx=f_auto,w_216,h_308"
                     cloudinaryLink2 = "https://media.rallyhouse.com/homepage/" + row[1] + "-" + str(i+1) + ".jpg?tx=f_auto,c_fit,w_730,h_730"
+                    cloudinaryLink3 = "https://media.rallyhouse.com/products/" + row[1] + "-" + str(i+1) + ".jpg?tx=f_auto,c_fit,w_110,h_158"
                     line = []
                     line.append(cloudinaryLink1)
                     data2.append(line)
@@ -53,9 +54,18 @@ def preprocess():
                         data2.append(blank)
                         numRows = 0
                     line = []
+                    line.append(cloudinaryLink3)
+                    data2.append(line)
+                    numRows+= 1
+                    if numRows == 20 :
+                        blank = []
+                        data2.append(blank)
+                        numRows = 0
+                    line = []
                 else:
                     #third image and beyond only need the big cloudinary links
                     cloudinaryLink1 = "https://media.rallyhouse.com/homepage/" + row[1] + "-" + str(i+1) + ".jpg?tx=f_auto,c_fit,w_730,h_730"
+                    cloudinaryLink3 = "https://media.rallyhouse.com/products/" + row[1] + "-" + str(i+1) + ".jpg?tx=f_auto,c_fit,w_110,h_158"
                     line.append(cloudinaryLink1)
                     data2.append(line)
                     numRows += 1
@@ -64,6 +74,14 @@ def preprocess():
                         blank = []
                         data2.append(blank)
                         numRows = 0
+                    line.append(cloudinaryLink3)
+                    data2.append(line)
+                    numRows+= 1
+                    if numRows == 20 :
+                        blank = []
+                        data2.append(blank)
+                        numRows = 0
+                    line = []
 #write cache invalidation data to csv
     with open("output_ns.csv", "w", newline="") as csvfile:
         writer1 = csv.writer(csvfile)
@@ -100,9 +118,9 @@ def clearcache():
 
     # Open the website and navigate to the correct page after logging in
     driver.get("https://console.cloudinary.com/media-optimizer/c-2832f4fd444e62e50b570381a0d48b/configuration/invalidate-cache")  # Replace with actual URL
-    time.sleep(5)  # Wait for the page to load
+    time.sleep(10)  # Wait for the page to load
     user_field = WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.XPATH, "//*[@id=\"user_session_email\"]"))
+                    EC.presence_of_element_located((By.XPATH, "//*[@id=\"user_session_email\"]")) #
                 )
 
     pwd_field = WebDriverWait(driver, 10).until(
@@ -118,13 +136,13 @@ def clearcache():
     login_button.click()
 
     optimizer_button = WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.XPATH, "//*[@id=\"media_optimizer\"]/div/img[2]"))
+                EC.presence_of_element_located((By.XPATH, "//*[@id=\"root\"]/div/div[2]/ul[1]/li[3]/a/div"))
                 )
 
     optimizer_button.click()
 
     cache_button = WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.XPATH, "//*[@id=\"standalone\"]/div/div/div[2]/div/div/div[1]/div/div[1]/div[3]/nav/ul/li[3]/div/div/a"))
+                EC.presence_of_element_located((By.XPATH, "//*[@id=\"root\"]/div/div[3]/div/div/div/nav/ul/li[3]/div/div/a/div[2]"))
                 )
 
     cache_button.click()
@@ -147,10 +165,10 @@ def clearcache():
             if len(chunk) == 20:
                 # Locate text field and submit button
                 text_field = WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.NAME, "urls"))
+                    EC.presence_of_element_located((By.XPATH, "//*[@id=\"form.urls\"]"))
                 )
-                submit_button = driver.find_element(By.XPATH, "//*[@id=\"standalone\"]/div/div/div[3]/div/div/div/div/div/div[3]/button")
-                
+                submit_button = driver.find_element(By.XPATH, "//*[@id=\"root\"]/div/div[4]/div/div/div/div/div/div/div[3]/button")
+
                 # Paste data into the text field
                 text_field.send_keys("\n".join(chunk))  # Join chunk into a single string
                 
@@ -159,9 +177,9 @@ def clearcache():
 
                 # we wait until we see the confirmation box appear then click the x to make it go away and insert the next data
                 confirm_box = WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.XPATH, "//*[@id=\"standalone\"]/div/div/div[3]/div/div/div/div/div[2]/div"))
+                    EC.presence_of_element_located((By.XPATH, "//*[@id=\"root\"]/div/div[4]/div/div/div/div/div/div[2]/div"))
                 )
-                confirm_click = driver.find_element(By.XPATH, "//*[@id=\"standalone\"]/div/div/div[3]/div/div/div/div/div[2]/div/button")
+                confirm_click = driver.find_element(By.XPATH, "//*[@id=\"root\"]/div/div[4]/div/div/div/div/div/div[2]/div/button")
                 confirm_click.click()
 
                 text_field.send_keys(Keys.CONTROL + "a")  # Select all text
@@ -171,17 +189,17 @@ def clearcache():
                 chunk = []
         if chunk:
             text_field = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.NAME, "urls"))
+                EC.presence_of_element_located((By.XPATH, "//*[@id=\"form.urls\"]"))
             )
-            submit_button = driver.find_element(By.XPATH, "//*[@id=\"standalone\"]/div/div/div[3]/div/div/div/div/div/div[3]/button")
+            submit_button = driver.find_element(By.XPATH, "//*[@id=\"root\"]/div/div[4]/div/div/div/div/div/div/div[3]/button")
             
             text_field.send_keys("\n".join(chunk))
             submit_button.click()
 
             confirm_box = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//*[@id=\"standalone\"]/div/div/div[3]/div/div/div/div/div[2]/div"))
+                EC.presence_of_element_located((By.XPATH, "//*[@id=\"root\"]/div/div[4]/div/div/div/div/div/div[2]/div"))
             )
-            confirm_click = driver.find_element(By.XPATH, "//*[@id=\"standalone\"]/div/div/div[3]/div/div/div/div/div[2]/div/button")
+            confirm_click = driver.find_element(By.XPATH, "//*[@id=\"root\"]/div/div[4]/div/div/div/div/div/div[2]/div/button")
             confirm_click.click()
 
     # Close the browser when done
