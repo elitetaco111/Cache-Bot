@@ -4,3 +4,5 @@ build/
 dist/
 *.spec
 settings.json
+cache-clearer.zip
+cacheassistant.exe
