@@ -15,8 +15,8 @@ Enter data into content invalidation request 49 assets at a time due to Akamai +
 Import the csv back into Netsuite providing a last Cache Cleared date on every product
 
 Need a login.txt containing cloudinary login info
-{user}
-{pwd}
+{username}
+{password}
 
 Credit:
 David Nissly
